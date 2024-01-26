@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Card,
   CardContent,
@@ -6,9 +8,25 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { parkedCars } from "../constants/parkedCars";
 
-const page = () => {
+import { useEffect, useState } from "react";
+
+const Page = () => {
+  const [parkedCars, setParkedCars] = useState<ParkedCar[]>([]);
+
+  useEffect(() => {
+    const getAllCars = async () => {
+      try {
+        const fetchedData = await fetch("/api/fetch-cars");
+        const parsedData = await fetchedData.json();
+        setParkedCars(parsedData);
+      } catch (error) {
+        console.log("Error fetching cars", error);
+      }
+    };
+    getAllCars();
+  }, []);
+
   return (
     <div className="flex flex-1 flex-col p-2 md:flex-row ">
       {parkedCars.map((parkedCar) => (
@@ -40,4 +58,4 @@ const page = () => {
     </div>
   );
 };
-export default page;
+export default Page;

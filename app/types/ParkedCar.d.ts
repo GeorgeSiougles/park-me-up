@@ -1,5 +1,5 @@
-export type ParkedCar = {
+interface ParkedCar {
   carPlates: string;
   carModel: string;
   ownerPhone: string;
-};
+}
