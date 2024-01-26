@@ -28,11 +28,11 @@ const Page = () => {
   }, []);
 
   return (
-    <div className="flex flex-1 flex-col p-2 md:flex-row ">
+    <div className="flex flex-1 flex-col p-2 md:flex-row max-w-full">
       {parkedCars.map((parkedCar) => (
         <Card
-          className="m-2 border-4 border-gray-700 bg-gray-100 max-w-sm "
-          key={parkedCar.carPlates}
+          className="m-2 border-4 border-gray-700 bg-gray-100 w-sm h-lg"
+          key={parkedCar._id}
         >
           <CardHeader>
             <CardTitle>
@@ -40,7 +40,7 @@ const Page = () => {
             </CardTitle>
             <CardDescription>Car Parked Date</CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="flex flex-1 flex-col ">
             <CardContent>
               <p>Phone:</p>
               <p>{parkedCar.ownerPhone}</p>
@@ -50,7 +50,7 @@ const Page = () => {
               <p>Current parking cost</p>
             </CardContent>
           </CardContent>
-          <CardFooter>
+          <CardFooter className="items-end justify-center">
             <p>Car Actions</p>
           </CardFooter>
         </Card>
