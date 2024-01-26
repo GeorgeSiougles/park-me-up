@@ -10,10 +10,10 @@ import { parkedCars } from "../constants/parkedCars";
 
 const page = () => {
   return (
-    <div className="flex p-2 sm:flex-col">
+    <div className="flex flex-1 flex-col p-2 md:flex-row ">
       {parkedCars.map((parkedCar) => (
         <Card
-          className="m-2 border-4 border-gray-700 bg-gray-100 sm:max-w-sm "
+          className="m-2 border-4 border-gray-700 bg-gray-100 max-w-sm "
           key={parkedCar.carPlates}
         >
           <CardHeader>
