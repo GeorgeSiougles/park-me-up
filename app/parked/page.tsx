@@ -31,7 +31,7 @@ const Page = () => {
     <div className="grid grid-cols-3 gap-4 p-2 md:flex-row max-w-full">
       {parkedCars.map((parkedCar) => (
         <Card
-          className="m-2 border-4 border-gray-700 bg-gray-100 w-sm h-lg"
+          className="m-2 border-4 border-gray-700 bg-gray-200 text-gray-700 w-sm h-lg"
           key={parkedCar._id}
         >
           <CardHeader>
