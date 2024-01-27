@@ -28,7 +28,7 @@ const Page = () => {
   }, []);
 
   return (
-    <div className="flex flex-1 flex-col p-2 md:flex-row max-w-full">
+    <div className="grid grid-cols-3 gap-4 p-2 md:flex-row max-w-full">
       {parkedCars.map((parkedCar) => (
         <Card
           className="m-2 border-4 border-gray-700 bg-gray-100 w-sm h-lg"
