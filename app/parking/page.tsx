@@ -14,9 +14,16 @@ const Page = () => {
     carModel: "",
     ownerPhone: "",
   });
+  const [plateLetters, setPlateLetters] = useState("");
+  const [plateNumbers, setPlateNumbers] = useState("");
 
-  const handlePlateChange = (newPlates: string) => {
-    setNewCar({ ...newCar, carPlates: newPlates });
+  const handlePlateLettersChange = (newLetters: string) => {
+    setPlateLetters(newLetters);
+    setNewCar({ ...newCar, carPlates: `${newLetters}-${plateNumbers}` });
+  };
+  const handlePlateNumbersChange = (newNumber: string) => {
+    setPlateNumbers(newNumber);
+    setNewCar({ ...newCar, carPlates: `${plateLetters}-${newNumber}` });
   };
   const handleModelChange = (newModel: string) => {
     setNewCar({ ...newCar, carModel: newModel });
@@ -45,11 +52,18 @@ const Page = () => {
           <div className={"flex flex-1 items-center justify-between mr-4"}>
             <Label>Car Plates</Label>
             <Input
-              maxLength={8}
-              placeholder={"ABC 1234"}
-              className="my-2"
-              value={newCar.carPlates}
-              onChange={(e) => handlePlateChange(e.target.value)}
+              maxLength={3}
+              placeholder={"ABC"}
+              className="m-2 max-w-16"
+              value={plateLetters}
+              onChange={(e) => handlePlateLettersChange(e.target.value)}
+            />
+            <Input
+              maxLength={4}
+              placeholder={"1234"}
+              className="max-w-24"
+              value={plateNumbers}
+              onChange={(e) => handlePlateNumbersChange(e.target.value)}
             />
           </div>
           <div className={"flex flex-1 items-center justify-between mr-4"}>
