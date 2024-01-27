@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/card";
 
 import { useEffect, useState } from "react";
+import { ParkedCar } from "../types/ParkedCar";
 
 const Page = () => {
   const [parkedCars, setParkedCars] = useState<ParkedCar[]>([]);
@@ -35,8 +36,9 @@ const Page = () => {
           key={parkedCar._id}
         >
           <CardHeader>
+            <CardTitle>{parkedCar.carModel}</CardTitle>
             <CardTitle>
-              {parkedCar.carModel} - {parkedCar.carPlates}
+              {parkedCar.carPlateLetters} - {parkedCar.carPlateNumbers}
             </CardTitle>
             <CardDescription>Car Parked Date</CardDescription>
           </CardHeader>

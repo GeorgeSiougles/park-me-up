@@ -4,7 +4,8 @@ mongoose.connect(process.env.MONGODB_URI!);
 mongoose.Promise = global.Promise;
 
 const parkedCarSchema = new Schema({
-  carPlates: String,
+  carPlateLetters: String,
+  carPlateNumbers: String,
   carModel: String,
   ownerPhone: String,
 });

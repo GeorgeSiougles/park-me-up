@@ -1,16 +1,16 @@
-import ParkedCar from "@/app/(models)/ParkedCar";
+import { ParkedCarSchema } from "@/app/types/ParkedCar";
 import { NextResponse } from "next/server";
-
 import { z } from "zod";
-import { parkedCarValidator } from "@/lib/validators/ParkedCar";
+
+import ParkedCar from "@/app/(models)/ParkedCar";
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const requestData = { ...body };
-    const result = parkedCarValidator.safeParse(requestData);
+    const result = ParkedCarSchema.safeParse(body);
+
     if (result.success) {
-      await ParkedCar.create(requestData);
+      await ParkedCar.create(body);
       return NextResponse.json(
         { message: "Car added to database" },
         { status: 201 }
