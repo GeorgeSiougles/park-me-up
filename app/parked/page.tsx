@@ -11,13 +11,17 @@ import {
 
 import { useEffect, useState } from "react";
 import { ParkedCar } from "../types/ParkedCar";
+import { LoaderIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const Page = () => {
   const [parkedCars, setParkedCars] = useState<ParkedCar[]>([]);
-
+  const [dataLoaded, setDataLoaded] = useState(false);
+  const router = useRouter();
   useEffect(() => {
     const getAllCars = async () => {
       try {
+        setDataLoaded(true);
         const fetchedData = await fetch("/api/fetch-cars");
         const parsedData = await fetchedData.json();
         setParkedCars(parsedData);
@@ -27,13 +31,28 @@ const Page = () => {
     };
     getAllCars();
   }, []);
+  if (dataLoaded && parkedCars.length === 0) {
+    return (
+      <div>
+        <LoaderIcon className="animate-spin" width={36} height={36} />
+        <span className="text-3xl text-gray-700">Loading...</span>
+      </div>
+    );
+  }
 
+  const handleClick = (id: string) => {
+    router.push(`/parked/${id}`);
+  };
   return (
     <div className="grid grid-cols-3 gap-4 p-2 md:flex-row max-w-full">
+      {parkedCars.length === 0 && dataLoaded && (
+        <span className="text-5xl text-cyan-900">Parking lot is empty</span>
+      )}
       {parkedCars.map((parkedCar) => (
         <Card
-          className="m-2 border-4 border-gray-700 bg-gray-200 text-gray-700 w-sm h-lg"
+          className="m-2 border-4 border-gray-700 bg-gray-200 text-gray-700 w-sm h-lg hover:bg-cyan-500"
           key={parkedCar._id}
+          onClick={() => handleClick(parkedCar._id!)}
         >
           <CardHeader>
             <CardTitle>{parkedCar.carModel}</CardTitle>
@@ -53,7 +72,7 @@ const Page = () => {
             </CardContent>
           </CardContent>
           <CardFooter className="items-end justify-center">
-            <p>Car Actions</p>
+            <p className="border-4 border-cyan-800 rounded-3xl p-4">View</p>
           </CardFooter>
         </Card>
       ))}
