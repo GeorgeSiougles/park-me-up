@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/card";
 import axios, { AxiosError } from "axios";
 import { LoaderIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 type ParkIdPageProps = {
@@ -22,6 +23,7 @@ const Page = ({ params }: ParkIdPageProps) => {
   const [parkedCar, setParkedCar] = useState<ParkedCar>();
   const [isLoading, setIsLoading] = useState(false);
   const [notFound, setNotFound] = useState<boolean>();
+  const router = useRouter();
   useEffect(() => {
     const fetchCar = async () => {
       try {
@@ -51,6 +53,7 @@ const Page = ({ params }: ParkIdPageProps) => {
           parkId: parkedCar?._id,
         },
       });
+      router.push("/parked");
     } catch (error) {
       console.log("something went wrong");
       setIsLoading(false);
