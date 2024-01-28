@@ -21,10 +21,10 @@ const Page = () => {
   useEffect(() => {
     const getAllCars = async () => {
       try {
-        setDataLoaded(true);
         const fetchedData = await fetch("/api/fetch-cars");
         const parsedData = await fetchedData.json();
         setParkedCars(parsedData);
+        setDataLoaded(true);
       } catch (error) {
         console.log("Error fetching cars", error);
       }

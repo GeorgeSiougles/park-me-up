@@ -6,6 +6,8 @@ export async function GET() {
     const parkedCars = await ParkedCar.find();
     return NextResponse.json(parkedCars, { status: 201 });
   } catch (error) {
-    console.log("Something went wrong :", error);
+    return NextResponse.json("Something went wrong looking fetching data", {
+      status: 500,
+    });
   }
 }
