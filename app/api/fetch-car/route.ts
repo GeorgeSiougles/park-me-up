@@ -1,9 +1,9 @@
 import ParkedCar from "@/app/(models)/ParkedCar";
-import { NextResponse } from "next/server";
 import { ObjectId } from "mongodb";
 import { z } from "zod";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(request: Response) {
+export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { parkId } = z.object({ parkId: z.string() }).parse(body);

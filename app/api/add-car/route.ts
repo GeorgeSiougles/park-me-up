@@ -1,10 +1,10 @@
 import { ParkedCarSchema } from "@/app/types/ParkedCar";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
 import ParkedCar from "@/app/(models)/ParkedCar";
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const result = ParkedCarSchema.safeParse(body);

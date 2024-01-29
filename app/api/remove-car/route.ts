@@ -1,8 +1,8 @@
 import ParkedCar from "@/app/(models)/ParkedCar";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
-export async function DELETE(request: Response) {
+export async function DELETE(request: NextRequest) {
   try {
     const body = await request.json();
     const { parkId } = z.object({ parkId: z.string() }).parse(body);
