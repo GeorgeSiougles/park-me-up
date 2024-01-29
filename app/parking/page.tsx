@@ -1,11 +1,8 @@
 "use client";
 
 import Form from "@/components/Form/Form";
-import { useRouter } from "next/navigation";
 
 const Page = () => {
-  const router = useRouter();
-
   return (
     <main>
       <div className="flex flex-col items-center ">

@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import { ParkedCar } from "../types/ParkedCar";
 import { LoaderIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 const Page = () => {
   const [parkedCars, setParkedCars] = useState<ParkedCar[]>([]);
@@ -23,10 +24,12 @@ const Page = () => {
       try {
         const fetchedData = await fetch("/api/fetch-cars");
         const parsedData = await fetchedData.json();
+        toast.loading("Loading data...", { duration: 500 });
         setParkedCars(parsedData);
         setDataLoaded(true);
+        toast.success("Data Loaded");
       } catch (error) {
-        console.log("Error fetching cars", error);
+        toast.error("Something went wrong");
       }
     };
     getAllCars();

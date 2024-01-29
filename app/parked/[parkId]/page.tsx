@@ -13,6 +13,7 @@ import axios, { AxiosError } from "axios";
 import { LoaderIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 type ParkIdPageProps = {
   params: {
@@ -33,11 +34,14 @@ const Page = ({ params }: ParkIdPageProps) => {
         });
         if (response.status === 200) {
           setParkedCar(response.data);
+          toast.success("Data Loaded");
         }
       } catch (error: AxiosError | unknown | any) {
         if (error.response.status === 404) {
           setNotFound(true);
+          toast.error("Car not found");
         }
+        toast.error("Something went wrong, try again later");
       } finally {
         setIsLoading(false);
       }

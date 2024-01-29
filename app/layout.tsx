@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Nav from "@/components/ui/nav";
+import ToastProvider from "@/components/toast/ToastProvider";
 
 export const metadata: Metadata = {
   title: "Park Me Up",
@@ -15,8 +16,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="bg-slate-300">
-        <Nav />
-        {children}
+        <ToastProvider>
+          <Nav />
+          {children}
+        </ToastProvider>
       </body>
     </html>
   );
