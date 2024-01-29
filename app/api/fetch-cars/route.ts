@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import ParkedCar from "@/app/(models)/ParkedCar";
 import { NextResponse } from "next/server";
 
