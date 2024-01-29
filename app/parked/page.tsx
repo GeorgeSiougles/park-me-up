@@ -14,6 +14,12 @@ import { ParkedCar } from "../types/ParkedCar";
 import { LoaderIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import {
+  calculateCost,
+  calculateTimeDifference,
+  displayTime,
+  formatTimestamp,
+} from "@/lib/utils";
 
 const Page = () => {
   const [parkedCars, setParkedCars] = useState<ParkedCar[]>([]);
@@ -24,7 +30,6 @@ const Page = () => {
       try {
         const fetchedData = await fetch("/api/fetch-cars");
         const parsedData = await fetchedData.json();
-        toast.loading("Loading data...", { duration: 500 });
         setParkedCars(parsedData);
         setDataLoaded(true);
         toast.success("Data Loaded");
@@ -46,39 +51,48 @@ const Page = () => {
   const handleClick = (id: string) => {
     router.push(`/parked/${id}`);
   };
+
   return (
     <div className="grid grid-cols-3 gap-4 p-2 md:flex-row max-w-full">
       {parkedCars.length === 0 && dataLoaded && (
         <span className="text-5xl text-cyan-900">Parking lot is empty</span>
       )}
-      {parkedCars.map((parkedCar) => (
-        <Card
-          className="m-2 border-4 border-gray-700 bg-gray-200 text-gray-700 w-sm h-lg hover:bg-cyan-500"
-          key={parkedCar._id}
-          onClick={() => handleClick(parkedCar._id!)}
-        >
-          <CardHeader>
-            <CardTitle>{parkedCar.carModel}</CardTitle>
-            <CardTitle>
-              {parkedCar.carPlateLetters} - {parkedCar.carPlateNumbers}
-            </CardTitle>
-            <CardDescription>Car Parked Date</CardDescription>
-          </CardHeader>
-          <CardContent className="flex flex-1 flex-col ">
-            <CardContent>
-              <p>Phone:</p>
-              <p>{parkedCar.ownerPhone}</p>
+      {parkedCars.map((parkedCar) => {
+        const formattedTime = formatTimestamp(parkedCar.createdAt!);
+        const { hh, mm } = calculateTimeDifference(formattedTime);
+        const parkingCost = calculateCost(hh, 2);
+        return (
+          <Card
+            className="m-2 border-4 border-gray-700 bg-gray-200 text-gray-700 w-sm h-lg hover:bg-cyan-500"
+            key={parkedCar._id}
+            onClick={() => handleClick(parkedCar._id!)}
+          >
+            <CardHeader>
+              <CardTitle>{parkedCar.carModel}</CardTitle>
+              <CardTitle>
+                {parkedCar.carPlateLetters} - {parkedCar.carPlateNumbers}
+              </CardTitle>
+              <CardDescription>Entry time: {formattedTime}</CardDescription>
+            </CardHeader>
+            <CardContent className="flex flex-1 flex-col ">
+              <CardContent>
+                <p>Phone:</p>
+                <p>{parkedCar.ownerPhone}</p>
+              </CardContent>
+              <CardContent>
+                <p>Car time Passed :{displayTime({ hh, mm })}</p>
+                <p>
+                  Current parking cost:
+                  {parkingCost} &euro;
+                </p>
+              </CardContent>
             </CardContent>
-            <CardContent>
-              <p>Car time Passed</p>
-              <p>Current parking cost</p>
-            </CardContent>
-          </CardContent>
-          <CardFooter className="items-end justify-center">
-            <p className="border-4 border-cyan-800 rounded-3xl p-4">View</p>
-          </CardFooter>
-        </Card>
-      ))}
+            <CardFooter className="items-end justify-center">
+              <p className="border-4 border-cyan-800 rounded-3xl p-4">View</p>
+            </CardFooter>
+          </Card>
+        );
+      })}
     </div>
   );
 };

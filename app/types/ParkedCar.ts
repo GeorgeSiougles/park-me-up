@@ -7,6 +7,8 @@ export type ParkedCar = {
   carPlateNumbers: string;
   carModel: string;
   ownerPhone: string;
+  createdAt?: string;
+  updatedAt?: string;
 };
 
 export type ParkedCarFormProps = {

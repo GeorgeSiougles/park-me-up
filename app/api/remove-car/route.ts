@@ -6,8 +6,6 @@ export async function DELETE(request: Response) {
   try {
     const body = await request.json();
     const { parkId } = z.object({ parkId: z.string() }).parse(body);
-    console.log("body: ", body);
-    console.log("parkId: ", parkId);
     await ParkedCar.findByIdAndDelete(parkId);
     return NextResponse.json("Car removed", { status: 200 });
   } catch (error) {

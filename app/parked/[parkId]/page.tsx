@@ -9,6 +9,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  calculateCost,
+  calculateTimeDifference,
+  displayTime,
+  formatTimestamp,
+} from "@/lib/utils";
 import axios, { AxiosError } from "axios";
 import { LoaderIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -59,7 +65,7 @@ const Page = ({ params }: ParkIdPageProps) => {
       });
       router.push("/parked");
     } catch (error) {
-      console.log("something went wrong");
+      toast.error("Somethin went wrong");
       setIsLoading(false);
     }
   };
@@ -73,6 +79,9 @@ const Page = ({ params }: ParkIdPageProps) => {
       </div>
     );
   }
+  const formattedTime = formatTimestamp(parkedCar?.createdAt!);
+  const { hh, mm } = calculateTimeDifference(formattedTime);
+  const parkingCost = calculateCost(hh, 2);
 
   return (
     <div className="flex items-center justify-center">
@@ -94,20 +103,18 @@ const Page = ({ params }: ParkIdPageProps) => {
               </CardTitle>
               <CardDescription>Car Parked Date</CardDescription>
             </CardHeader>
-            <CardContent className="flex flex-1 flex-col ">
-              <CardContent>
-                <p>Phone:</p>
-                <p>{parkedCar?.ownerPhone}</p>
-              </CardContent>
-              <CardContent>
-                <p>Car time Passed</p>
-                <p>Current parking cost</p>
-              </CardContent>
+            <CardContent>
+              <p>Phone:</p>
+              <p>{parkedCar?.ownerPhone}</p>
+            </CardContent>
+            <CardContent>
+              <p>Car time Passed :{displayTime({ hh, mm })}</p>
+              <p>
+                Current parking cost:
+                {parkingCost} &euro;
+              </p>
             </CardContent>
             <CardFooter className="items-end justify-evenly">
-              <p className="border-4 border-cyan-800 rounded-3xl px-8 py-2 hover:bg-cyan-700 hover:text-gray-200 hover:border-cyan-700">
-                Edit
-              </p>
               <p className="border-4 bg-cyan-800 text-gray-200 border-cyan-800 rounded-3xl px-4 py-2  hover:bg-green-700 hover:border-green-700">
                 <button onClick={handleCheckout}>Checkout</button>
               </p>
