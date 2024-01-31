@@ -10,6 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 /**
  * Form component for adding parked cars.
@@ -35,8 +36,8 @@ const Form = () => {
     try {
       // Submit form data to the server
       const response = await axios.post("/api/add-car", data);
-      const { errors = {} } = response.data;
 
+      const { errors = {} } = response.data;
       // Map server errors to form fields and set errors using setError
       const fieldErrorMapping: Record<string, ValidFieldNames> = {
         carPlateLetters: "carPlateLetters",
@@ -58,11 +59,23 @@ const Form = () => {
       router.push("/parked");
     } catch (error) {
       // Handle form submission failure
-      alert("Submitting form failed!");
-      return;
+      if (axios.isAxiosError(error)) {
+        // Axios error (network error, HTTP error, etc.)
+        if (error.response?.status === 400) {
+          // Car with the same plate already exists
+          toast.error(
+            "Car with the same plate already exists. Please provide unique plate details."
+          );
+        } else {
+          // Handle other HTTP errors
+          toast.error(`HTTP Error: ${error.response?.status || "Unknown"}`);
+        }
+      } else {
+        // Handle other types of errors (e.g., network issues, timeouts)
+        toast.error("An unexpected error occurred. Please try again later.");
+      }
     }
   };
-
   // Render the form with form fields and submit button
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
