@@ -58,12 +58,20 @@ const ParkIdPage = ({ params }: ParkIdPageProps): JSX.Element => {
           setParkedCar(response.data);
           toast.success("Data Loaded");
         }
-      } catch (error: AxiosError | unknown | any) {
-        if (error.response?.status === 404) {
-          setNotFound(true);
-          toast.error("Car not found");
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          // Axios error (network error, HTTP error, etc.)
+          if (error.response?.status === 404) {
+            setNotFound(true);
+            toast.error("Car not found");
+          } else {
+            // Handle other HTTP errors
+            toast.error(`HTTP Error: ${error.response?.status || "Unknown"}`);
+          }
+        } else {
+          // Handle other types of errors (e.g., network issues, timeouts)
+          toast.error("Something went wrong, try again later");
         }
-        toast.error("Something went wrong, try again later");
       } finally {
         setIsLoading(false);
       }
