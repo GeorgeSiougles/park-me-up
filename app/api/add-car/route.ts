@@ -17,6 +17,19 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const body = await request.json();
     const result = ParkedCarSchema.safeParse(body);
 
+    // Check if a car with the same plate letters and numbers already exists
+    const existingCar = await ParkedCar.findOne({
+      carPlateLetters: body.carPlateLetters,
+      carPlateNumbers: body.carPlateNumbers,
+    });
+
+    if (existingCar) {
+      return NextResponse.json(
+        { message: "Car with the same plate already exists" },
+        { status: 400 }
+      );
+    }
+
     if (result.success) {
       // Add the car to the database
       await ParkedCar.create(body);
