@@ -1,6 +1,10 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
+/**
+ * Home component renders the landing page with a welcome message
+ * and a button to navigate to the parking page.
+ */
 export default function Home() {
   return (
     <div className="ml-4 text-center">

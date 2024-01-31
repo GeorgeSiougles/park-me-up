@@ -11,8 +11,13 @@ import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 
+/**
+ * Form component for adding parked cars.
+ */
 const Form = () => {
   const router = useRouter();
+
+  // React Hook Form setup
   const {
     register,
     handleSubmit,
@@ -22,10 +27,17 @@ const Form = () => {
     resolver: zodResolver(ParkedCarSchema),
   });
 
+  /**
+   * Submit handler for the form.
+   * @param {ParkedCar} data - Form data representing a parked car.
+   */
   const onSubmit = async (data: ParkedCar) => {
     try {
+      // Submit form data to the server
       const response = await axios.post("/api/add-car", data);
       const { errors = {} } = response.data;
+
+      // Map server errors to form fields and set errors using setError
       const fieldErrorMapping: Record<string, ValidFieldNames> = {
         carPlateLetters: "carPlateLetters",
         carPlateNumbers: "carPlateNumbers",
@@ -41,15 +53,20 @@ const Form = () => {
           message: errors[fieldWithError],
         });
       }
+
+      // Redirect to the parked cars page
       router.push("/parked");
     } catch (error) {
+      // Handle form submission failure
       alert("Submitting form failed!");
       return;
     }
   };
 
+  // Render the form with form fields and submit button
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      {/* Car Plates section */}
       <div className={"flex flex-1 items-center justify-between mr-4"}>
         <Label>Car Plates</Label>
         <FormField
@@ -70,6 +87,8 @@ const Form = () => {
           maxLength={4}
         />
       </div>
+
+      {/* Car Model section */}
       <div>
         <Label>Car Model</Label>
         <FormField
@@ -81,6 +100,8 @@ const Form = () => {
           className="my-2"
         />
       </div>
+
+      {/* Owner Phone section */}
       <div>
         <Label>Owner Phone</Label>
         <FormField
@@ -93,12 +114,15 @@ const Form = () => {
           maxLength={10}
         />
       </div>
+
+      {/* Submit button */}
       <div className="flex flex-1 justify-center items-center ">
         <Button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? <p>Submiting...</p> : <p>Submit</p>}
+          {isSubmitting ? <p>Submitting...</p> : <p>Submit</p>}
         </Button>
       </div>
     </form>
   );
 };
+
 export default Form;

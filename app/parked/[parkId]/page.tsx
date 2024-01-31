@@ -26,24 +26,40 @@ type ParkIdPageProps = {
     parkId: string;
   };
 };
-const Page = ({ params }: ParkIdPageProps) => {
+/**
+ * ParkIdPage component displays details of a parked car identified by the parkId parameter.
+ *
+ * @component
+ * @param {ParkIdPageProps} props - The component properties.
+ * @returns {JSX.Element} The rendered ParkIdPage component.
+ */
+const ParkIdPage = ({ params }: ParkIdPageProps): JSX.Element => {
+  // State to hold parked car details, loading status, and notFound status
   const [parkedCar, setParkedCar] = useState<ParkedCar>();
   const [isLoading, setIsLoading] = useState(false);
   const [notFound, setNotFound] = useState<boolean>();
+
+  // Next.js router instance
   const router = useRouter();
+
+  /**
+   * Effect to fetch car details when the component mounts or when parkId changes.
+   */
   useEffect(() => {
     const fetchCar = async () => {
       try {
         setIsLoading(true);
+        // Make a POST request to fetch car details
         const response = await axios.post("/api/fetch-car", {
           parkId: params.parkId,
         });
+
         if (response.status === 200) {
           setParkedCar(response.data);
           toast.success("Data Loaded");
         }
       } catch (error: AxiosError | unknown | any) {
-        if (error.response.status === 404) {
+        if (error.response?.status === 404) {
           setNotFound(true);
           toast.error("Car not found");
         }
@@ -52,9 +68,13 @@ const Page = ({ params }: ParkIdPageProps) => {
         setIsLoading(false);
       }
     };
+
     fetchCar();
   }, [params.parkId]);
 
+  /**
+   * Effect to refresh the page every 5 minutes.
+   */
   useEffect(() => {
     const refreshInterval = setInterval(
       () => window.location.reload(),
@@ -66,9 +86,14 @@ const Page = ({ params }: ParkIdPageProps) => {
     };
   }, []);
 
+  /**
+   * Handler function to handle the checkout button click.
+   * Attempts to delete the parked car and navigates to the "/parked" route on success.
+   */
   const handleCheckout = async () => {
     try {
       setIsLoading(true);
+      // Make a DELETE request to remove the parked car
       await axios.delete("/api/remove-car", {
         data: {
           parkId: parkedCar?._id,
@@ -76,11 +101,12 @@ const Page = ({ params }: ParkIdPageProps) => {
       });
       router.push("/parked");
     } catch (error) {
-      toast.error("Somethin went wrong");
+      toast.error("Something went wrong");
       setIsLoading(false);
     }
   };
 
+  // If the car is not found, display an error message
   if (notFound) {
     return (
       <div className="flex justify-center my-4">
@@ -90,9 +116,13 @@ const Page = ({ params }: ParkIdPageProps) => {
       </div>
     );
   }
+
+  // Calculate formatted time, time difference, and parking cost
   const formattedTime = formatTimestamp(parkedCar?.createdAt!);
   const { hh, mm } = calculateTimeDifference(formattedTime);
   const parkingCost = calculateCost(hh, 2);
+
+  // Render the card with parked car details
 
   return (
     <div className="flex items-center justify-center">
@@ -136,4 +166,4 @@ const Page = ({ params }: ParkIdPageProps) => {
     </div>
   );
 };
-export default Page;
+export default ParkIdPage;
