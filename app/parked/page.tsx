@@ -39,6 +39,18 @@ const Page = () => {
     };
     getAllCars();
   }, []);
+
+  useEffect(() => {
+    const refreshInterval = setInterval(
+      () => window.location.reload(),
+      5 * 60 * 1000
+    );
+
+    return () => {
+      clearInterval(refreshInterval);
+    };
+  }, []);
+
   if (dataLoaded && parkedCars.length === 0) {
     return (
       <div>
