@@ -81,7 +81,7 @@ const Page = () => {
   };
 
   return (
-    <div className="grid grid-cols-3 gap-4 p-2 md:flex-row max-w-full">
+    <div className="grid grid-cols-1 gap-4 p-2 sm:grid-cols-3 max-w-full">
       {/* Display loading spinner while data is being loaded */}
       {parkedCars.length === 0 && dataLoaded && (
         <div>
