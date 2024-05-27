@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   Card,
@@ -7,19 +7,19 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from '@/components/ui/card';
 
-import { useEffect, useState } from "react";
-import { ParkedCar } from "../types/ParkedCar";
-import { LoaderIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
-import toast from "react-hot-toast";
+import { useEffect, useState } from 'react';
+import { ParkedCar } from '../types/ParkedCar';
+import { LoaderIcon } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 import {
   calculateCost,
   calculateTimeDifference,
   displayTime,
   formatTimestamp,
-} from "@/lib/utils";
+} from '@/lib/utils';
 /**
  * Page component displays a list of parked cars with relevant information.
  *
@@ -38,20 +38,20 @@ const Page = () => {
   useEffect(() => {
     const getAllCars = async () => {
       try {
-        const fetchedData = await fetch("/api/fetch-cars");
+        const fetchedData = await fetch('/api/fetch-cars');
 
         // Check if the response is successful before parsing the data
         if (!fetchedData.ok) {
-          throw new Error("Failed to fetch data");
+          throw new Error('Failed to fetch data');
         }
 
         const parsedData = await fetchedData.json();
         setParkedCars(parsedData);
         setDataLoaded(true);
-        toast.success("Data Loaded");
+        toast.success('Data Loaded');
       } catch (error) {
-        toast.error("Failed to fetch data. Please try again later.");
-        console.error("Error fetching data:", error);
+        toast.error('Failed to fetch data. Please try again later.');
+        console.error('Error fetching data:', error);
       }
     };
 
@@ -83,7 +83,7 @@ const Page = () => {
   return (
     <div className="grid grid-cols-1 gap-4 p-2 sm:grid-cols-3 max-w-full">
       {/* Display loading spinner while data is being loaded */}
-      {parkedCars.length === 0 && dataLoaded && (
+      {parkedCars.length === 0 && !dataLoaded && (
         <div>
           <LoaderIcon className="animate-spin" width={36} height={36} />
           <span className="text-3xl text-gray-700">Loading...</span>
